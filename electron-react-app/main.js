@@ -12,7 +12,22 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadURL('http://localhost:3000/');
+  if(ENV === "dev"){
+    //for dev
+    mainWindow.loadURL('http://localhost:3000/');
+  }else if(ENV === "prod" || ENV === "production"){
+    //for prod
+    //win.loadFile('build/index.html')
+
+    const url = require('url').format({
+      protocol: 'file',
+      slashes: true,
+      pathname: require('path').join(__dirname, 'build/index.html')
+    })
+    mainWindow.loadURL(url)
+  }else{
+    throw new Error("wrong env");
+  }
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()

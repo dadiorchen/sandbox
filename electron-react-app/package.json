@@ -4,6 +4,7 @@
   "private": true,
   "main": "./main.js",
   "dependencies": {
+    "@electron-forge/maker-dmg": "^6.0.0-beta.58",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -18,7 +19,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-
     "start-forge": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"
@@ -51,14 +51,20 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "electron_react_app"
-          }
+      "packagerConfig": {
+        "osxSign": {
+          "identity": "[some thing like: Developer ID Application: some name (some code)]",
+          "hardened-runtime": true,
+          "entitlements": "entitlements.plist",
+          "entitlements-inherit": "entitlements.plist",
+          "signature-flags": "library"
         },
+        "osxNotarize": {
+          "appleId": "[your appleId]",
+          "appleIdPassword": "[you appleId password]"
+        }
+      },
+      "makers": [
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
@@ -66,12 +72,11 @@
           ]
         },
         {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "background": "./assets/b1-right.png",
+            "format": "ULFO"
+          }
         }
       ]
     }
